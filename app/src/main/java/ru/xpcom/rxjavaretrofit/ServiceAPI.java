@@ -1,7 +1,5 @@
 package ru.xpcom.rxjavaretrofit;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import ru.xpcom.rxjavaretrofit.pojo.Entries;

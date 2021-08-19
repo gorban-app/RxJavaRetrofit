@@ -7,8 +7,7 @@ import java.util.List;
 public class Entries {
 
     @SerializedName("entries")
-    List<Entry> entryList;
-
+    public List<Entry> entryList;
     public static class Entry {
         @SerializedName("API")
         public String apiTitle;
