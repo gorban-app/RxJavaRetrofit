@@ -1,6 +1,7 @@
 package ru.xpcom.rxjavaretrofit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -27,10 +28,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        retrofit = RetrofitFactory.getRetrofit();
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewAdapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(recyclerViewAdapter);
-        retrofit = RetrofitFactory.getRetrofit();
+
 
         getEntries();
     }
@@ -45,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 .map(result -> result.entryList)
                 .subscribe(this::handleResults, this::handleError);
 
-        Observable<List<Entries.Entry>> btcObservable = serviceAPI.getEntries()
+        // Two call
+/*        Observable<List<Entries.Entry>> btcObservable = serviceAPI.getEntries()
                 .map(result -> Observable.fromIterable(result.entryList))
                 .flatMap(x -> x).filter(y -> {
                     //y.coinName = "btc";
@@ -62,15 +66,13 @@ public class MainActivity extends AppCompatActivity {
         Observable.merge(btcObservable, ethObservable)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResults, this::handleError);
+                .subscribe(this::handleResults, this::handleError);*/
     }
     
 
     private void handleResults(List<Entries.Entry> marketList) {
         if (marketList != null && marketList.size() != 0) {
             recyclerViewAdapter.setData(marketList);
-
-
         } else {
             Toast.makeText(this, "NO RESULTS FOUND",
                     Toast.LENGTH_LONG).show();
@@ -78,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable t) {
-
         Toast.makeText(this, "ERROR IN FETCHING API RESPONSE. Try again",
                 Toast.LENGTH_LONG).show();
     }
